@@ -186,7 +186,7 @@ server.listen(port, (err) => {
 
 Теперь мы можем отправить запрос на адрес `http://localhost:3000/` и получить ответ от сервера.
 
-
+[Пример простого сервера и клиента с POST запросом](https://gist.github.com/umidjons/88fa0041e6dd583491dd83662d007d2c)
 
 ## Организация кода в Node.js
 
@@ -195,6 +195,7 @@ server.listen(port, (err) => {
 
 [5 основных правил структурирования проектов](https://medium.com/devschacht/node-hero-chapter-7-4078fa61ece6)
 
+[Node.js app пример](https://github.com/contentful/the-example-app.nodejs) смотрите только те файлы и папки что вам нужны
 
 ## Nodemon, мониторинг изменений в файлах Node.js
 
