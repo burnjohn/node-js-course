@@ -2,7 +2,7 @@ const mainRoute = require('./main/main');
 const motocycleRoute = require('./motocycle/motocycle');
 
 const router = {
-  '/': mainRoute,
+  '/me': mainRoute,
   '/motocycle': motocycleRoute,
   default: mainRoute
 };

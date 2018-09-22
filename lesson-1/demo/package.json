@@ -9,7 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "morgan": "^1.9.1",
     "nodemon": "^1.18.4"
   }
