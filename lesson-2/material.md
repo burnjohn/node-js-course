@@ -37,7 +37,7 @@ REST — REpresentational State Transfer. Это передача/изменен
 
 Чтобы создать нового покупателя в системе мы используем:
 
-`POST http://www.example.com/customers`
+`POST http://www.example.com/customer`
 
 Чтобы создать новый товар мы используем:
 
