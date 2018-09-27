@@ -7,9 +7,6 @@
     - event loop
 - Работа с каталогами
 - Работа с файлами
-- Stream, Pipe
-- Websockets/AJAX
-    - Socket.io 
 
 ## Архитектура REST. RESTful API
 
@@ -141,4 +138,214 @@ Node.js предоставляет специальный объект `global`,
 ### Event loop
 [Статья об ивент луп](https://medium.com/front-end-hacking/javascript-event-loop-explained-4cd26af121d4)
 [Видео об ивент луп](https://medium.com/front-end-hacking/javascript-event-loop-explained-4cd26af121d4)
+
+## Работа с каталогами
+
+В Node JS есть модуль отвечающий за работу с директориями и файлами. Он называется fs (file system).
+
+#### Проверить существует ли директория 
+
+`fs.existsSync(path)`
+
+ВАЖНО! `fs.exists(path,cb)` deprecated, по этому нужно использовать только его синхронный аналог.
+
+
+#### Создание директории
+
+`fs.mkdir(path[, mode], callback);`
+
+- `path` — это имя директории, включая путь к ней.
+- `mode` – это права доступа к директории. По умолчанию — 0777.
+- `callback` — это функция обратного вызова. Никакие аргументы кроме возможных исключений не передаются функции обратного вызова завершения.
+
+Пример
+
+```
+var fs = require("fs");
+ 
+console.log("Going to create directory /tmp/test");
+fs.mkdir('/tmp/test',function(err){
+   if (err) {
+      return console.error(err);
+   }
+   console.log("Directory created successfully!");
+});
+```
+
+#### Чтение директории
+
+`fs.readdir(path, callback);`
+
+Пример
+```
+var fs = require("fs");
+ 
+console.log("Going to read directory /tmp");
+fs.readdir("/tmp/",function(err, files){
+   if (err) {
+      return console.error(err);
+   }
+   files.forEach( function (file){
+      console.log( file );
+   });
+});
+```
+
+#### Удаление директории
+
+`fs.rmdir(path, callback)`
+
+Пример
+
+```
+var fs = require("fs");
+ 
+console.log("Going to delete directory /tmp/test");
+fs.rmdir("/tmp/test",function(err){
+   if (err) {
+      return console.error(err);
+   }
+   console.log("Going to read directory /tmp");
+   
+   fs.readdir("/tmp/",function(err, files){
+      if (err) {
+         return console.error(err);
+      }
+      files.forEach( function (file){
+         console.log( file );
+      });
+   });
+});
+```
+
+[Видое о работе с директориями](https://www.youtube.com/watch?v=GlsyhBFfrgg)
+
+## Работа с файлами
+
+Пример чтения файла
+
+```
+var fs = require("fs");
+ 
+// Asynchronous read
+fs.readFile('input.txt', function (err, data) {
+   if (err) {
+      return console.error(err);
+   }
+   console.log("Asynchronous read: " + data.toString());
+});
+ 
+// Synchronous read
+var data = fs.readFileSync('input.txt');
+console.log("Synchronous read: " + data.toString());
+ 
+console.log("Program Ended");
+```
+
+### Флаги для операций чтения/записи :
+
+`r `— Открыть файл для чтения. Если файл не существует, добавляется исключение.
+
+`г+` — Открыть файл для чтения и записи. Если файл не существует, добавляется исключение.
+
+`rs `— Открыть файл для чтения в синхронном режиме.
+
+`rs+` — Открыть файл для чтения и записи, запросив у ОС открыть его в синхронном режиме.
+
+`w `— Открыть файл для записи. Файл создается (если он не существует) или усекается (если он существует).
+
+`wx `— Работает так же как «w», но не выполняется, если путь существует.
+
+`w+` — Открыть файл для чтения и записи. Если файл не существует, он создается, если файл существует, он усекается.
+
+`wx+` — Работает так же как «w+», но не выполняется, если путь существует.
+
+`a `— Открыть файл для дополнения. Если файл не существует, он создается.
+
+`ax `— Работает как «а», но не выполняется, если путь существует.
+
+`a+` — Открыть файл для чтения и расширения. Если файл не существует, он создается.
+
+`ах`+ — Работает так же как «a+», но не выполняется, если путь существует.
+
+
+#### Пример
+
+```
+// fs_write.js
+
+const fs = require('fs');
+
+// Путь к файлу который мы хотим изменить
+let path = 'ghetto_gospel.txt';  
+let buffer = new Buffer('Those who wish to follow me\nI welcome with my hands\nAnd the red sun sinks at last');
+
+// открыть файл в режиме записи, добавить коллбек в котором сделать запись в файл
+fs.open(path, 'w', function(err, fd) {  
+    if (err) {
+        throw 'could not open file: ' + err;
+    }
+
+    // записать контент в буфер с позиции 0 до конца 
+    fs.write(fd, buffer, 0, buffer.length, null, function(err) {
+        if (err) throw 'error writing file: ' + err;
+        
+        // Завершить изменение файла
+        fs.close(fd, function() {
+            console.log('wrote the file successfully');
+        });
+    });
+```
+
+Для перезаписи файла можно использовать более простой метод `fs.writeFile()`
+
+[Статья "Как писать данные в файлы"](https://stackabuse.com/writing-to-files-in-node-js/)
+
+```
+var fs = require('fs');
+
+fs.writeFile('mynewfile3.txt', 'This is my text', function (err) {
+  if (err) throw err;
+  console.log('Replaced!');
+});
+```
+
+#### Запись файла
+`fs.writeFile(filename, data[, options], callback)`
+
+Этот метод перезаписывает файл, если файл уже существует. Если вы хотите дописать что-то в существующий файл, вы должны использовать другой доступный метод.
+
+###  Переименовать файл
+
+`fs.rename(new_file_path, old_file_path, callback_function)`
+
+#### Удаление файла
+
+`fs.unlink(path, callback)`
+
+```
+var fs = require("fs");
+ 
+console.log("Going to delete an existing file");
+fs.unlink('input.txt', function(err) {
+   if (err) {
+      return console.error(err);
+   }
+   console.log("File deleted successfully!");
+});
+```
+
+#### Получение информации о файлах
+
+`fs.stat(path, callback)`
+
+Чаще всего используемы только эти 2 метода:
+
+`stats.isFile()` — Возвращает true, если тип файла — простой файл.
+
+`stats.isDirectory()` — Возвращает true, если тип файла — каталог.
+
+
+[Статья о работе с файлами и директориями](https://webformyself.com/node-js-fs-fajlovaya-sistema/)
+
 
