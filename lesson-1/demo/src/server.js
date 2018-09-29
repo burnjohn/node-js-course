@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+
 const morgan = require('morgan');
 const router = require('./routes/router');
 
@@ -7,11 +8,11 @@ const logger = morgan('combined');
 
 const startServer = port => {
 
-  console.log('__filename: ', __filename);
-
   const server = http.createServer((request, response) => {
     // Get route from the request
     const parsedUrl = url.parse(request.url);
+
+    // parsedUrl = 'category'
 
     // Get router function
     const func = router[parsedUrl.pathname] || router.default;

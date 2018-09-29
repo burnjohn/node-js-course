@@ -1,11 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
 
 const usersFolder = path.resolve(__dirname, '../../../', 'data/users');
 
-const saveNewUser = (fileName, data, cb) => {
+const writeFile = util.promisify(fs.writeFile);
+
+const saveNewUser = (fileName, data) => {
   const src = path.resolve(usersFolder, fileName + '.json');
-  fs.writeFile(src, JSON.stringify(data), cb);
+  const dataStr = JSON.stringify(data);
+
+  // returning promise
+  return writeFile(src, dataStr);
 };
 
 const createUser = (request, response) => {
@@ -23,7 +29,9 @@ const createUser = (request, response) => {
       response.end();
     };
 
-    saveNewUser(fileName, userData, sendResponse);
+    saveNewUser(fileName, userData)
+      .then(sendResponse)
+      .catch(console.log);
   };
 
   request
