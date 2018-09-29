@@ -1,4 +1,5 @@
 const getClearUrl = url => {
+  // `/user/12345`
   const lastIndex = url.lastIndexOf('/');
   const idString = url.slice(lastIndex +1).trim();
   const idNumber = +idString;

@@ -17,11 +17,13 @@ const createUser = (request, response) => {
 
     const fileName = userData.userName.toLowerCase() + userData.id;
 
-    saveNewUser(fileName, userData, () => {
+    const sendResponse = () => {
       response.writeHead(200, {"Content-Type": "application/json"});
       response.write(JSON.stringify(userData));
       response.end();
-    });
+    };
+
+    saveNewUser(fileName, userData, sendResponse);
   };
 
   request
