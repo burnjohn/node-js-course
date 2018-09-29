@@ -1,13 +1,22 @@
 # Lesson 2. Node js основы
 
 - Синхронность, асинхронность процессов
+    - синхронные асинхронные методы
     - event loop
-    
+    - promise object
+    - async, await    
 - Потоки в node js
 
 ## Синхронность, асинхронность процессов
 
-[Ссылка на презентацию по event loop]()
+[Статья по промисам](https://habr.com/company/zerotech/blog/317256/)
+
+[Ссылка на презентацию по event loop](https://drive.google.com/open?id=1OBMSG1HyNa13DtI_J_csFMvk0O6S9pQK)
+
+#### Видео по промисам
+
+- https://www.youtube.com/watch?v=SjNmkeUpQAU
+- https://www.youtube.com/watch?v=s6SH72uAn3Q
 
 ## Потоки в node js (Streams)
 
