@@ -225,8 +225,8 @@ server.listen(port, (err) => {
 
 - В роутинге должны быть следующие пути:
     - GET `/products` в ответе должны прийти все товары (из `all-products.json`)
-    - GET `/product/:id` в ответ должен прийти один товар (из `all-products.json`) (id с url должен совпадать с id товара)
-    - POST `/user/create` 
+    - GET `/products/:id` в ответ должен прийти один товар (из `all-products.json`) (id с url должен совпадать с id товара)
+    - POST `/users` 
        1. Вы отправляете данные нового юзера в формате
 
        ```
@@ -251,7 +251,7 @@ server.listen(port, (err) => {
        ```
 
 #### Дополнительное задание
-- Создать роут POST `/product/create` 
+- Создать роут POST `/products` 
    1. Вы отправляете данные нового товара в формате
    
    ```
