@@ -395,6 +395,8 @@ fs.unlink('input.txt', function(err) {
        ```
    - в идеале использовать `multipart/form-data` кодировку
    - попробуйте сделать без сторонних библиотек
+   
+   [Как отправить `multipart/form-data` с postman](https://www.youtube.com/watch?v=3vqvZmP28KE)
        
    Статьи что помогут с загрузкой изображения:
     - https://codeburst.io/how-to-handle-multipart-form-data-in-nodejs-file-uploading-in-nodejs-26c0cb88adcf
