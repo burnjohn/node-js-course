@@ -1,13 +1,13 @@
 const mainRoute = require('./main/main');
-const motocycleRoute = require('./motocycle/motocycle');
+const imageRoute = require('./image/get-image');
 const getUser = require('./user/get-user');
 const createUser = require('./user/create-user');
 
 const router = {
   '/me': mainRoute,
-  '/motocycle': motocycleRoute,
+  '/image': imageRoute,
   '/user': getUser,
-  '/user/create': createUser,
+  '/users': createUser,
   default: mainRoute
 };
 

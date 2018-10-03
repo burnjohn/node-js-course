@@ -15,10 +15,13 @@ myReadStream.on('data', chunk => {
     console.log('WAS PAUSED: ', !myReadStream.isPaused());
 
     setTimeout(() => {
+
       myReadStream.resume();
       console.log('WAS STARTED: ', !myReadStream.isPaused());
+
     }, 3000)
   }
+
   console.log('New chunk received: ', chunkIndex);
 });
 

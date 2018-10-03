@@ -1,4 +1,3 @@
 .idea/
 .DS_Store
-/lesson-1/demo/node_modules/
-/lesson-2/demo/node_modules/
+node_modules

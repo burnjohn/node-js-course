@@ -11,6 +11,7 @@ const motocycleRoute = (request, response) => {
   });
 
   const readStream = fs.createReadStream(filePath);
+
   readStream.pipe(response);
 };
 

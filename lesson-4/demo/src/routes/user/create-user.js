@@ -14,7 +14,6 @@ const saveNewUser = (fileName, data) => {
 };
 
 const createUser = (request, response) => {
-
   const user = request.body;
   const userData = Object.assign({}, user, { id: Date.now() });
 
@@ -23,11 +22,17 @@ const createUser = (request, response) => {
   const sendResponse = () => {
     response.json({
       status: 'success',
-      userData
-    });
+      user: {
+        "userName": "Ivan",
+        "password": "some pass",
+        "tel": 380635291111,
+        "id": 1538002306645
+      }
+  });
   };
 
   const sendError = () => {
+    response.status(400);
     response.json({
       error: 'user was not saved'
     });

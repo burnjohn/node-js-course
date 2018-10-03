@@ -18,9 +18,11 @@ const upperCaseTransform = new Transform({
       .toString()
       .split(' ')
       .map(str => str.toUpperCase())
+      .reverse()
       .join(' ');
 
-    done(null, newData);
+
+    done(null, '1111');
   }
 });
 
