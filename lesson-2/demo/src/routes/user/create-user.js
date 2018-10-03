@@ -19,19 +19,28 @@ const createUser = (request, response) => {
 
   const handleDataLoad = () => {
     const data = Buffer.concat(body).toString();
-    const userData = Object.assign({}, JSON.parse(data), { id: Date.now() });
 
-    const fileName = userData.userName.toLowerCase() + userData.id;
+    var fileStream = fs.createWriteStream(path.join(__dirname, 'user-image.json'));
+    fileStream.write(body.toString());
+    fileStream.end();
 
-    const sendResponse = () => {
-      response.writeHead(200, {"Content-Type": "application/json"});
-      response.write(JSON.stringify(userData));
-      response.end();
-    };
+    fileStream.on('data', (chunk) => {
+      console.log('chunk', chunk);
+    });
 
-    saveNewUser(fileName, userData)
-      .then(sendResponse)
-      .catch(console.log);
+  //   const userData = Object.assign({}, JSON.parse(data), { id: Date.now() });
+  //
+  //   const fileName = userData.userName.toLowerCase() + userData.id;
+  //
+  //   const sendResponse = () => {
+  //     response.writeHead(200, {"Content-Type": "application/json"});
+  //     response.write(JSON.stringify(userData));
+  //     response.end();
+  //   };
+  //
+  //   saveNewUser(fileName, userData)
+  //     .then(sendResponse)
+  //     .catch(console.log);
   };
 
   request

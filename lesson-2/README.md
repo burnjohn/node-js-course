@@ -381,11 +381,9 @@ fs.unlink('input.txt', function(err) {
 
 #### Дополнительное задание
 
-- добавить возможность загружать картинки для определенного товара
+- добавить возможность загружать картинку для определенного товара
     - нужно создать новый эндпоинт POST `/images`
-    - он должен принимать с фронтенда запрос со следующими данными:
-        - картинка
-        - id товара
+    - он должен принимать с фронтенда запрос с картинкой
     - в ответ сервер должен отправить 
        ```
        {
@@ -393,15 +391,7 @@ fs.unlink('input.txt', function(err) {
         "imageSrc": <image-src>
        }
        ```
-   - в идеале использовать `multipart/form-data` кодировку
-   - попробуйте сделать без сторонних библиотек
-   
-   [Как отправить `multipart/form-data` с postman](https://www.youtube.com/watch?v=3vqvZmP28KE)
-       
-   Статьи что помогут с загрузкой изображения:
-    - https://codeburst.io/how-to-handle-multipart-form-data-in-nodejs-file-uploading-in-nodejs-26c0cb88adcf
-    - https://developer.mozilla.org/ru/docs/Web/API/FormData/Using_FormData_Objects
-   
+  
 #### Требования
    - Приложение должно лежать в отдельном вашем репозитории с названием `marketplace-server-goit`
    - Все задание нужно делать в ветке `homework-2`
