@@ -12,7 +12,7 @@ const userSchema = new Schema({
   email: String
 });
 
-userSchema.plugin(timestamp);
+// userSchema.plugin(timestamp);
 
 const User = mongoose.model('User', userSchema);
 
