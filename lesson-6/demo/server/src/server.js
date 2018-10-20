@@ -1,4 +1,4 @@
-const http = require('http')
+const http = require('http');
 const bodyParser = require('body-parser');
 const app = require('./modules/app');
 const morgan = require('morgan');

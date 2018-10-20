@@ -9,7 +9,7 @@ const makeHandleEvent = (client, clientManager, chatRoomManager) => {
     });
   };
 
-  // проверка на то существует ли пользователь
+  // проверка на то выбрали ли мы пользователя
   const ensureUserSelected = (clientId) => {
     return ensureExists(
       () => clientManager.getUserByClientId(clientId),
@@ -30,7 +30,8 @@ const makeHandleEvent = (client, clientManager, chatRoomManager) => {
     return Promise.all([
       ensureValidChatRoom(chatRoomName),
       ensureUserSelected(client.id),
-    ]).then(([chatRoom, user]) => Promise.resolve({chatRoom, user}));
+    ])
+      .then(([chatRoom, user]) => Promise.resolve({chatRoom, user}));
   };
 
   // функция обработки событий со всеми проверками
