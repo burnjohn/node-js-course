@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 
-export default function() {
+const getChatHandlers = () => {
   const socket = io.connect('http://localhost:8080');
 
   function registerHandler(onMessageReceived) {
@@ -33,11 +33,11 @@ export default function() {
   }
 
   function getChatrooms(cb) {
-    socket.emit('chatrooms', null, cb);
+    socket.emit('chatrooms', cb);
   }
 
   function getAvailableUsers(cb) {
-    socket.emit('availableUsers', null, cb);
+    socket.emit('availableUsers', cb);
   }
 
   return {
@@ -50,5 +50,7 @@ export default function() {
     registerHandler,
     unregisterHandler,
   };
-}
+};
+
+export default getChatHandlers;
 

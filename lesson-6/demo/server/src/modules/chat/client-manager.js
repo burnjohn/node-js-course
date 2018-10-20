@@ -1,57 +1,68 @@
-const userTemplates = require('./config/users');
+// Шаблон пользователей
+const userTemplates = require('./templates/users');
 
-const createClientManager = () => {
-  // mapping of all connected clients
-  const clients = new Map();
+// Все доступные устройства с пользователями что есть в чате
+const clients = {};
 
-  const addClient = (client) => {
-    console.log('Client added', client.id);
+// Добавить устройство
+const addClient = (client) => {
+  console.log('Client added', client.id);
 
-    clients.set(client.id, {client});
-  };
-
-  const registerClient = (client, user) => {
-    console.log('Client registered', client.id);
-
-    clients.set(client.id, {client, user});
-  };
-
-  const removeClient = (client) => {
-    console.log('Client removed');
-
-    clients.delete(client.id);
-  };
-
-  const getAvailableUsers = () => {
-    const usersTaken = new Set(
-      Array.from(clients.values())
-        .filter(c => c.user)
-        .map(c => c.user.name),
-    );
-    return userTemplates.filter(u => !usersTaken.has(u.name));
-  };
-
-  const isUserAvailable = (userName) => {
-    return getAvailableUsers().some(u => u.name === userName);
-  };
-
-  const getUserByName = (userName) => {
-    return userTemplates.find(u => u.name === userName);
-  };
-
-  const getUserByClientId = (clientId) => {
-    return (clients.get(clientId) || {}).user;
-  };
-
-  return {
-    addClient,
-    registerClient,
-    removeClient,
-    getAvailableUsers,
-    isUserAvailable,
-    getUserByName,
-    getUserByClientId,
-  };
+  clients[client.id] = { client };
 };
 
-module.exports = createClientManager;
+// Зарегистрировать пользователя
+const registerClient = (client, user) => {
+  // client - устройство/клиент
+  // user - пользователь
+  console.log('Client registered', client.id);
+
+  clients[client.id] = { client, user };
+};
+
+const removeClient = (client) => {
+  console.log('Client removed');
+
+  delete clients[client.id];
+};
+
+// Взять всех свободных пользователей которых еще нет в чате из шаблона
+const getAvailableUsers = () => {
+  const allClients = Object.values(clients);
+
+  const uniqueUsers = new Set(
+    allClients
+      .filter(c => c.user)
+      .map(c => c.user.name),
+  );
+
+  return userTemplates.filter(u => !uniqueUsers.has(u.name));
+};
+
+const isUserAvailable = (userName) => {
+  return getAvailableUsers().some(u => u.name === userName);
+};
+
+// Взять пользователя из шаблона по id устройства
+const getUserByName = (userName) => {
+  return userTemplates.find(u => u.name === userName);
+};
+
+// Взять пользователя по id устройства
+const getUserByClientId = (clientId) => {
+  const client = clients[clientId] || {};
+
+  return client.user;
+};
+
+
+
+module.exports = {
+  addClient,
+  registerClient,
+  removeClient,
+  getAvailableUsers,
+  isUserAvailable,
+  getUserByName,
+  getUserByClientId,
+};

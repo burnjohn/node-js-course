@@ -1,32 +1,31 @@
 const createChatRoom = require('./chatroom');
-const chatRoomTemplates = require('./config/chatrooms');
+const chatRoomTemplates = require('./templates/chatrooms');
 
-const createChatRoomManager = () => {
-  // mapping of all available chatrooms
-  const chatrooms = new Map(
-    chatRoomTemplates.map(c => [
-      c.name,
-      createChatRoom(c),
-    ]),
-  );
+// Все доступные комнаты
+const chatRooms = {};
 
-  const removeClient = (client) => {
-    chatrooms.forEach(c => c.removeUser(client));
-  };
+// Создание комнат с темплейта
+chatRoomTemplates.forEach(chatRoom => {
+  chatRooms[chatRoom.name] = createChatRoom(chatRoom);
+});
 
-  const getChatRoomByName = (chatroomName) => {
-    return chatrooms.get(chatroomName);
-  };
-
-  const getAllCharRooms = () => {
-    return Array.from(chatrooms.values()).map(c => c.getChatRoomInfo());
-  };
-
-  return {
-    removeClient,
-    getChatRoomByName,
-    getAllCharRooms,
-  };
+// Удалить всех пользователей из комнаты
+const removeClient = (client) => {
+  Object.values(chatRooms).forEach(c => c.removeUser(client));
 };
 
-module.exports = createChatRoomManager;
+// взять комнату
+const getChatRoomByName = (chatroomName) => {
+  return chatRooms[chatroomName];
+};
+
+// взять все комнаты
+const getAllCharRooms = () => {
+  return Object.values(chatRooms).map(c => c.getChatRoomInfo());
+};
+
+module.exports = {
+  removeClient,
+  getChatRoomByName,
+  getAllCharRooms,
+};

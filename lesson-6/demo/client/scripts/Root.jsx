@@ -7,7 +7,7 @@ import Home from './Home';
 import Loader from './Loader';
 import UserSelection from './UserSelection';
 import Chatroom from './Chatroom';
-import socket from './socket';
+import getChatHandlers from './socket';
 
 export default class Root extends React.Component {
   constructor(props, context) {
@@ -16,7 +16,7 @@ export default class Root extends React.Component {
     this.state = {
       user: null,
       isRegisterInProcess: false,
-      client: socket(),
+      client: getChatHandlers(),
       chatrooms: null,
     };
 

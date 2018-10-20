@@ -34,7 +34,9 @@ const moveImage = (fileObject, userId) => {
   const tempFilePath = path.join(TEMP_IMAGE_FOLDER, fileObject.originalname);
   const newFilePath = path.join(userImagePath, fileObject.originalname);
 
-  return renameFile(tempFilePath, newFilePath).then(() => userImageFolderName);
+  return renameFile(tempFilePath, newFilePath)
+    .then(() => userImageFolderName)
+    .catch((error) => console.log(error))
 };
 
 const saveImageMultipart = (req, res) => {
