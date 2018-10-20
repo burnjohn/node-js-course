@@ -1,38 +1,40 @@
 const makeHandleEvent = (client, clientManager, chatRoomManager) => {
-  // промисифай функция
-  const ensureExists = (getter, rejectionMessage) => {
-    return new Promise(function(resolve, reject) {
-      const res = getter();
-      return res
-        ? resolve(res)
-        : reject(rejectionMessage);
-    });
-  };
-
   // проверка на то выбрали ли мы пользователя
   const ensureUserSelected = (clientId) => {
-    return ensureExists(
-      () => clientManager.getUserByClientId(clientId),
-      'select user first',
-    );
+    const user = clientManager.getUserByClientId(clientId);
+
+    if (!user) {
+      console.log('select user first');
+      return false;
+    }
+
+    return user;
   };
 
   // проверка на то существует ли комната (чат рум)
   const ensureValidChatRoom = (chatRoomName) => {
-    return ensureExists(
-      () => chatRoomManager.getChatRoomByName(chatRoomName),
-      `invalid chatRoom name: ${chatRoomName}`,
-    );
+    const chatRoom = chatRoomManager.getChatRoomByName(chatRoomName);
+
+    if (!chatRoom) {
+      console.log(`invalid chatRoom name: ${chatRoomName}`);
+      return false;
+    }
+
+    return chatRoom;
   };
 
   // сама проверка на чат рум и юзера
-  const ensureValidChatRoomAndUserSelected = (chatRoomName) => {
-    return Promise.all([
-      ensureValidChatRoom(chatRoomName),
-      ensureUserSelected(client.id),
-    ])
-      .then(([chatRoom, user]) => Promise.resolve({chatRoom, user}));
-  };
+  const ensureValidChatRoomAndUserSelected = (chatRoomName) =>
+    new Promise((resolve, reject) => {
+        const chatRoom = ensureValidChatRoom(chatRoomName);
+        const user = ensureUserSelected(client.id);
+
+        if (chatRoom && user) {
+          resolve({chatRoom, user});
+        }
+
+        reject();
+    });
 
   // функция обработки событий со всеми проверками
   const handleEvent = (chatRoomName, createEntry) => (
@@ -41,13 +43,16 @@ const makeHandleEvent = (client, clientManager, chatRoomManager) => {
       .then(({ chatRoom, user }) => {
 
         // Создание самой записи сообщения для чат румы
-        const entry = Object.assign({ user }, createEntry());
+        const message = Object.assign({ user }, createEntry());
 
         // Добавление записи в историю сообщений чат румы
-        chatRoom.addEntry(entry);
+        chatRoom.addEntry(message);
+
+        const messageWithChat = Object.assign({chat: chatRoomName}, message );
 
         // отсылаем сообщение всем остальным участникам чат рума
-        chatRoom.broadcastMessage(Object.assign({chat: chatRoomName}, entry));
+        chatRoom.broadcastMessage(messageWithChat);
+
         return chatRoom;
       })
   );
@@ -60,19 +65,20 @@ const getChatHandlers = (client, clientManager, chatRoomManager) => {
   const handleEvent = makeHandleEvent(client, clientManager, chatRoomManager);
 
   // обработчик на регистрацию клиента (устройства что подключилось к чату)
-  const handleRegister = (userName, callback) => {
-    if (!clientManager.isUserAvailable(userName))
-      return callback('user is not available');
+  const handleRegister = (userName, respondToClient) => {
+    if (!clientManager.isUserAvailable(userName)) {
+      return respondToClient('user is not available');
+    }
 
     const user = clientManager.getUserByName(userName);
 
     clientManager.registerClient(client, user);
 
-    return callback(null, user);
+    return respondToClient(null, user);
   };
 
   // обработчик на добавления юзера в чат рум (но добавляем мы устройство-клиент, а не юзера)
-  const handleJoin = (chatRoomName, callback) => {
+  const handleJoin = (chatRoomName, respondToClient) => {
     // Создаем функцию что возвращает сообщение для чата, позже она будет передана в чат руму
     const createEntry = () => ({event: `joined ${chatRoomName}`});
 
@@ -81,12 +87,12 @@ const getChatHandlers = (client, clientManager, chatRoomManager) => {
       chatRoom.addUser(client);
 
       // отсылаем историю другим участникам чата
-      callback(null, chatRoom.getChatHistory());
-    }).catch(callback);
+      respondToClient(null, chatRoom.getChatHistory());
+    }).catch(respondToClient);
   };
 
   // обработчик на удаление юзера в чат рум
-  const handleLeave = (chatRoomName, callback) => {
+  const handleLeave = (chatRoomName, respondToClient) => {
     // Создаем функцию что возвращает сообщение для чата, позже она будет передана в чат руму
     const createEntry = () => ({event: `left ${chatRoomName}`});
 
@@ -95,29 +101,29 @@ const getChatHandlers = (client, clientManager, chatRoomManager) => {
         // удаляем юзера с чат комнаты
         chatRoom.removeUser(client.id);
 
-        callback(null);
+        respondToClient(null);
       })
-      .catch(callback);
+      .catch(respondToClient);
   };
 
   // обработчик на сообщение в чат комнате
-  const handleMessage = ({chatRoomName, message} = {}, callback) => {
+  const handleMessage = ({chatRoomName, message} = {}, respondToClient) => {
     // Создаем функцию что возвращает сообщение для чата, позже она будет передана в чат руму
     const createEntry = () => ({message});
 
     handleEvent(chatRoomName, createEntry)
-      .then(() => callback(null))
-      .catch(callback);
+      .then(() => respondToClient(null))
+      .catch(respondToClient);
   };
 
   // обработчик для получения списка всех доступных чат комнат
-  const handleGetChatRooms = (callback) => {
-    return callback(null, chatRoomManager.getAllCharRooms());
+  const handleGetChatRooms = (respondToClient) => {
+    return respondToClient(null, chatRoomManager.getAllCharRooms());
   };
 
   // обработчик для получения списка всех доступных юзеров
-  const handleGetAvailableUsers = (callback) => {
-    return callback(null, clientManager.getAvailableUsers());
+  const handleGetAvailableUsers = (respondToClient) => {
+    return respondToClient(null, clientManager.getAvailableUsers());
   };
 
   const handleDisconnect = () => {
