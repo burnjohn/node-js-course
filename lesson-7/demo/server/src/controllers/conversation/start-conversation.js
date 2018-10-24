@@ -36,17 +36,13 @@ const handleStartConversation = (request, response) => {
   const name = request.body.name;
 
   const sendResponse = (conversationList) => {
-    const chatParams = {
-      userId1: convesationOwnerId,
-      userId2: newUserId,
-      conversation: conversationList[0]
-    };
+    const conversation = conversationList[0];
 
-    initChat(server, chatParams);
+    // initChat(server, conversation);
 
     response.json({
       status: 'success',
-      conversation: conversationList[0]
+      conversation
     });
   };
 

@@ -2,6 +2,7 @@ const io = require('socket.io-client');
 
 const initChat = () => {
   const socket = io.connect('http://localhost:8080');
+  const userId = '5bbe436478847559db89b3d8';
 
   socket.on('error', function(err) {
     console.log('received socket error:');
@@ -12,37 +13,26 @@ const initChat = () => {
     console.log('message: ', message);
   });
 
-  function register(userId, cb) {
-    socket.emit('register', userId, cb);
+  function join(cb) {
+    socket.emit('join', userId, cb);
   }
 
-  function join(conversationId, cb) {
-    socket.emit('join', conversationId, cb);
+  function leave(cb) {
+    socket.emit('leave', userId, cb);
   }
 
-  function leave(chatRoomName, cb) {
-    socket.emit('leave', chatRoomName, cb);
+  function message(message, cb) {
+    const data = {
+      userId,
+      message
+    };
+    socket.emit('message', data, cb);
   }
 
-  function message(chatRoomName, msg, cb) {
-    socket.emit('message', msg, cb);
-  }
-
-  function getChatrooms(cb) {
-    socket.emit('chatrooms', cb);
-  }
-
-  function getAvailableUsers(cb) {
-    socket.emit('availableUsers', cb);
-  }
-
-  return {
-    register,
+  window.chat = {
     join,
     leave,
     message,
-    getChatrooms,
-    getAvailableUsers,
   };
 };
 

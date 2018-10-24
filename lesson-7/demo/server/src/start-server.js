@@ -4,10 +4,11 @@ const server = require('./modules/server');
 const morgan = require('morgan');
 const router = require('./router');
 
-const errorHandler = (err, req, res)  => {
+const errorHandler = (err, request, response)  => {
   console.error(err.stack);
 
-  res.json(500).send('Something broke!');
+  response.status(500);
+  response.send('Something broke!');
 };
 
 const initServer = port => {
