@@ -6,16 +6,16 @@ module.exports = {
     'react-hot-loader/patch',
     'webpack-dev-server/client?http://localhost:3001',
     'webpack/hot/only-dev-server',
-    path.resolve(__dirname, 'scripts', 'index.jsx'),
+    path.resolve(__dirname, 'scripts', 'index.js'),
   ],
   resolve: {
     modules: [path.resolve(__dirname, 'node_modules')],
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['*', '.js'],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js)$/,
         exclude: /node_modules/,
         use: ['babel-loader'],
       },

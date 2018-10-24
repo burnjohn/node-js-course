@@ -31,7 +31,7 @@ const getChatHandlers = (client, userManager, messagesManager, conversation) => 
 
     messagesManager.addMessage(message);
     messagesManager.broadcastMessage(message);
-    
+
     respondToClient(null);
   };
 

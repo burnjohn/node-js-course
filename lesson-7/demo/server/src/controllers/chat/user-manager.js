@@ -24,7 +24,7 @@ const createUserManager = () => {
     delete clients[client.id];
   };
 
-// Взять пользователя из шаблона по id устройства
+// Взять пользователя  по id устройства
   const getUserById = (userId) => {
     console.log(userTemplates.find(u => u.id === userId));
     return userTemplates.find(u => u.id === userId);
@@ -47,12 +47,4 @@ const createUserManager = () => {
 };
 
 
-module.exports = {
-  addClient,
-  registerClient,
-  removeClient,
-  getAvailableUsers,
-  isUserAvailable,
-  getUserById,
-  getUserByClientId,
-};
+module.exports = createUserManager;

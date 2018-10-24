@@ -1,6 +1,6 @@
-const MessageSchema = require('../../../models/message');
+const MessageSchema = require('../../models/message');
 
-const createMessagesManager = ({ image, conversationId, membersList }) => {
+const createMessagesManager = (conversationId, membersList) => {
   const chatHistory = [];
 
   // Отправить сообщение всем юзерам в комнате

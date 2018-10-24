@@ -1,23 +1,26 @@
 const createSocket = require('socket.io');
-const userManager = require('./controllers/user-manager');
-const messagesManager = require('./controllers/messages-manager');
+const createUserManager = require('./user-manager');
+const createMessagesManager = require('./messages-manager');
 const getChatHandlers = require('./handlers');
 
-const initChat = (server, conversation) => {
+const initChat = (server, { conversation, userId1, userId2 }) => {
   // Создаем соккет
   const socketIo = createSocket(server);
 
+  // Создаем обработчики событий для чата
+  const userManager = createUserManager();
+  const messagesManager = createMessagesManager(conversation.id, [userId1, userId2]);
+
+  const {
+    handleRegister,
+    handleJoin,
+    handleLeave,
+    handleMessage,
+    handleDisconnect,
+  } = getChatHandlers(userManager, messagesManager, conversation);
+
   // Подписываемся на соединение к сокету
   socketIo.on('connection', (client) => {
-    // Создаем обработчики событий для чата
-    const {
-      handleRegister,
-      handleJoin,
-      handleLeave,
-      handleMessage,
-      handleDisconnect,
-    } = getChatHandlers(client, userManager, messagesManager, conversation);
-
     console.log('client connected...', client.id);
     userManager.addClient(client);
 

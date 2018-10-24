@@ -1,5 +1,7 @@
 const ConversationSchema = require('../../models/conversation');
 const UserSchema = require('../../models/user');
+const server = require('../../modules/server');
+const initChat = require('../chat/init-chat');
 
 const createConversationInDB = (userId1, userId2, name) => {
   const conversation = new ConversationSchema({
@@ -24,17 +26,27 @@ const updateUsers = (userId1, userId2, conversationId) => {
   return Promise.all([updateUser(userId1, conversationId), updateUser(userId2, conversationId)]);
 };
 
-const handleCreateRequest = (request, response) => {
-  const userId1 = request.body.userId1;
-  const userId2 = request.body.userId2;
+const checkUserConversations = (ownerId, newUserId) => {
+  return ConversationSchema.find({ participants: [ownerId ,newUserId ] })
+};
+
+const handleStartConversation = (request, response) => {
+  const convesationOwnerId = request.body.ownerId;
+  const newUserId = request.body.newUserId;
   const name = request.body.name;
 
-  const sendResponse = (conversation) => {
-    console.log(conversation);
+  const sendResponse = (conversationList) => {
+    const chatParams = {
+      userId1: convesationOwnerId,
+      userId2: newUserId,
+      conversation: conversationList[0]
+    };
+
+    initChat(server, chatParams);
 
     response.json({
       status: 'success',
-      conversation
+      conversation: conversationList[0]
     });
   };
 
@@ -45,9 +57,15 @@ const handleCreateRequest = (request, response) => {
     });
   };
 
-  createConversationInDB(userId1, userId2, name)
+  checkUserConversations(convesationOwnerId, newUserId)
+    .then( conversation => {
+      if (!conversation.length) {
+        return createConversationInDB(convesationOwnerId, newUserId, name)
+      }
+      return conversation;
+    })
     .then(sendResponse)
     .catch(sendError)
 };
 
-module.exports = handleCreateRequest;
+module.exports = handleStartConversation;

@@ -1,19 +1,15 @@
 const io = require('socket.io-client');
 
-const getChatHandlers = () => {
+const initChat = () => {
   const socket = io.connect('http://localhost:8080');
-
-  function registerHandler(onMessageReceived) {
-    socket.on('message', onMessageReceived);
-  }
-
-  function unregisterHandler() {
-    socket.off('message');
-  }
 
   socket.on('error', function(err) {
     console.log('received socket error:');
     console.log(err);
+  });
+
+  socket.on('message', function(message) {
+    console.log('message: ', message);
   });
 
   function register(userId, cb) {
@@ -47,10 +43,8 @@ const getChatHandlers = () => {
     message,
     getChatrooms,
     getAvailableUsers,
-    registerHandler,
-    unregisterHandler,
   };
 };
 
-export default getChatHandlers;
+export default initChat;
 
