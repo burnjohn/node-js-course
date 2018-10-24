@@ -1,0 +1,56 @@
+const io = require('socket.io-client');
+
+const getChatHandlers = () => {
+  const socket = io.connect('http://localhost:8080');
+
+  function registerHandler(onMessageReceived) {
+    socket.on('message', onMessageReceived);
+  }
+
+  function unregisterHandler() {
+    socket.off('message');
+  }
+
+  socket.on('error', function(err) {
+    console.log('received socket error:');
+    console.log(err);
+  });
+
+  function register(userId, cb) {
+    socket.emit('register', userId, cb);
+  }
+
+  function join(conversationId, cb) {
+    socket.emit('join', conversationId, cb);
+  }
+
+  function leave(chatRoomName, cb) {
+    socket.emit('leave', chatRoomName, cb);
+  }
+
+  function message(chatRoomName, msg, cb) {
+    socket.emit('message', msg, cb);
+  }
+
+  function getChatrooms(cb) {
+    socket.emit('chatrooms', cb);
+  }
+
+  function getAvailableUsers(cb) {
+    socket.emit('availableUsers', cb);
+  }
+
+  return {
+    register,
+    join,
+    leave,
+    message,
+    getChatrooms,
+    getAvailableUsers,
+    registerHandler,
+    unregisterHandler,
+  };
+};
+
+export default getChatHandlers;
+
