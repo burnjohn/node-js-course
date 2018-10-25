@@ -8,7 +8,7 @@ const MessageSchema = new Schema({
     ref: 'Conversation',
   },
   message: {
-    type: String,
+    type: Schema.Types.String,
     required: true
   },
   author: {

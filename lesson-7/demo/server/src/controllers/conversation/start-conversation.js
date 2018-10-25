@@ -38,7 +38,7 @@ const handleStartConversation = (request, response) => {
   const sendResponse = (conversationList) => {
     const conversation = conversationList[0];
 
-    // initChat(server, conversation);
+    initChat(server, conversation);
 
     response.json({
       status: 'success',

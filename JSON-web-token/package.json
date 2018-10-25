@@ -1,0 +1,27 @@
+{
+  "name": "server-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burnjohn/server-playground.git"
+  },
+  "author": "Ivan Lapa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/burnjohn/server-playground/issues"
+  },
+  "homepage": "https://github.com/burnjohn/server-playground#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.14",
+    "morgan": "^1.9.1"
+  }
+}

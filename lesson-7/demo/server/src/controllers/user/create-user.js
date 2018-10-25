@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const createUser = (request, response) => {
   const user = request.body;
   const hashedPassword =  bcrypt.hashSync(user.password, 10);
+
   const userData = Object.assign({}, user, {
     password: hashedPassword
   });
