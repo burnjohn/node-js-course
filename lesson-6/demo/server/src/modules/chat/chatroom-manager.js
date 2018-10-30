@@ -9,7 +9,7 @@ chatRoomTemplates.forEach(chatRoom => {
   chatRooms[chatRoom.name] = createChatRoom(chatRoom);
 });
 
-// Удалить всех пользователей из комнаты
+// Удалить пользователя из всех чат комнат
 const removeClient = (client) => {
   Object.values(chatRooms).forEach(c => c.removeUser(client));
 };
