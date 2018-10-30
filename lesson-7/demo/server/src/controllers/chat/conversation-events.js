@@ -1,48 +1,86 @@
 const User = require('../../models/user');
+const Messages = require('../../models/message');
+const { sendError } = require('./response-helper');
+const conversationManager = require('./conversation-manager');
 
-const getChatHandlers = (client, conversationManager, conversation) => {
+const getConversationHandlers = (client) => {
 
-  const onJoin = userId => {
-    conversationManager.addClient(client);
+  const onJoin = (userId, conversationId) => {
+    conversationManager.addClient(client, conversationId);
 
-    User.findById(userId).then( user => {
+    Messages.find({ conversation: conversationId }, null, {
+      skip:0, // Starting Row
+      limit:20, // Ending Row
+      sort:{
+        createdAt: 1 //Sort by Date Added ASC
+      }
+    })
+      .then(messageList => {
+        messageList.forEach( message => {
+          conversationManager.broadcastMessage(message, conversationId);
+        });
+
+        User.findById(userId).then(user => {
+          const message = {
+            conversation: conversationId,
+            message: `joined ${user.firstName} ${user.lastName}`,
+            author: user.id,
+            createdAt: Date.now()
+          };
+
+          conversationManager.addUser(user, conversationId);
+          conversationManager.broadcastMessage(message, conversationId);
+          conversationManager.addMessage(message, conversationId);
+        });
+      })
+  };
+
+  const onLeave = (conversationId, userId) => {
+
+    User.findById(userId).then(user => {
+      if (!user) {
+        console.log('No such user!');
+        return;
+      }
+
       const message = {
-        conversationId: conversation.id,
-        message: `joined ${user.firstName} ${user.lastName}`,
-        author: user.id
+        conversation: conversationId,
+        message: `left  ${user.firstName} ${user.lastName}`,
+        author: user.id,
+        createdAt: Date.now()
       };
 
-      conversationManager.addUser(user);
-      conversationManager.addMessage(message);
-      conversationManager.broadcastMessage(message);
+      conversationManager.broadcastMessage(message, conversationId);
+      conversationManager.addMessage(message, conversationId);
+
+      conversationManager.removeUser(user, conversationId);
     });
   };
 
+  const onMessage = ({message, userId} = {}, conversationId, respondFunc) => {
 
-  const onLeave = () => {
-      const message = {
-        conversationId: conversation.id,
-        message: `left  ${user.firstName} ${user.lastName}`,
-        author: user.id
-      };
+    if (!message || !userId) {
+      sendError(respondFunc, 'No required field');
+    }
 
-      conversationManager.addMessage(message);
-      conversationManager.broadcastMessage(message);
+    const fullMessage = {
+      conversation: conversationId,
+      message,
+      author: userId,
+      createdAt: Date.now()
+    };
 
-      conversationManager.removeClient(client.id);
+    conversationManager.broadcastMessage(fullMessage, conversationId);
+    conversationManager.addMessage(fullMessage, conversationId);
   };
 
-  const onMessage = ({ message, authorId } = {}) => {
+  const onDisconnect = (error) => {
+    console.log('client disconnect...', client.id, 'Error: ', error);
+    const clientConversationIds = conversationManager.getClientConversationIds(client);
 
-      const fullMessage = { conversationId, message, authorId: authorId };
-
-      conversationManager.addMessage(fullMessage);
-      conversationManager.broadcastMessage(fullMessage);
-  };
-
-  const onDisconnect = () => {
-    console.log('client disconnect...', client.id);
-    conversationManager.removeClient(client);
+    clientConversationIds.forEach( conversationId => {
+      conversationManager.removeClient(client, conversationId);
+    });
   };
 
   return {
@@ -53,4 +91,4 @@ const getChatHandlers = (client, conversationManager, conversation) => {
   };
 };
 
-module.exports = getChatHandlers;
+module.exports = getConversationHandlers;

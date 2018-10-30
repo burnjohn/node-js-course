@@ -1,8 +1,15 @@
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
 const setTimestamp = (schema) => {
   // Добавляем к схеме 2 поля
   schema.add({
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: {
+      type: Schema.Types.Date
+    },
+    updatedAt: {
+      type: Schema.Types.Date
+    }
   });
 
   // Создаем хук на pre-save

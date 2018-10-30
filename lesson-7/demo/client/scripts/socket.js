@@ -1,8 +1,11 @@
-const io = require('socket.io-client');
+import io from 'socket.io-client';
+import { renderMessage } from './render-service'
+import { startMessagesService } from './messages-service'
 
-const initChat = () => {
-  const socket = io.connect('http://localhost:8080');
-  const userId = '5bbe436478847559db89b3d8';
+const initChat = (userId, conversationId) => {
+  const socket = io.connect('http://localhost:8080', );
+
+  startMessagesService(sendMessage, joinToChat);
 
   socket.on('error', function(err) {
     console.log('received socket error:');
@@ -11,29 +14,30 @@ const initChat = () => {
 
   socket.on('message', function(message) {
     console.log('message: ', message);
+
+    renderMessage(message, userId);
   });
 
-  function join(cb) {
-    socket.emit('join', userId, cb);
+  function joinToChat(cb) {
+    socket.emit('join', userId, conversationId, cb);
+
+    const leaveChatBtn = document.querySelector('.message__leave-btn');
+    leaveChatBtn.addEventListener('click', leaveChat);
   }
 
-  function leave(cb) {
-    socket.emit('leave', userId, cb);
+  function leaveChat(cb) {
+    socket.emit('leave', conversationId, userId, cb);
   }
 
-  function message(message, cb) {
+  function sendMessage(message, cb) {
     const data = {
       userId,
       message
     };
-    socket.emit('message', data, cb);
+    socket.emit('message', data, conversationId, cb);
   }
 
-  window.chat = {
-    join,
-    leave,
-    message,
-  };
+
 };
 
 export default initChat;

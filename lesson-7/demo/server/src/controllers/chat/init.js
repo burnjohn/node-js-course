@@ -1,20 +1,19 @@
-const createSocket = require('socket.io');
-const createConversationManager = require('./conversation-manager');
+const socketIo = require('../../modules/socket');
 const getConversationEvents = require('./conversation-events');
 
-const initChat = (server, conversation) => {
-  const socketIo = createSocket(server);
+const initChat = () => {
+  console.log('Chat listener inited');
 
   // Создаем обработчики событий для чата
-  const conversationManager = createConversationManager(conversation.id);
-
   socketIo.on('connection', (client) => {
+    console.log('Connection: ', client.id);
+
     const {
       onJoin,
       onLeave,
       onMessage,
       onDisconnect,
-    } = getConversationEvents(client, conversationManager, conversation);
+    } = getConversationEvents(client);
 
     // подписываемся на все события чата
     client

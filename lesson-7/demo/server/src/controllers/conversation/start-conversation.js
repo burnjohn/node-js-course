@@ -1,7 +1,5 @@
 const ConversationSchema = require('../../models/conversation');
 const UserSchema = require('../../models/user');
-const server = require('../../modules/server');
-const initChat = require('../chat/init-chat');
 
 const createConversationInDB = (userId1, userId2, name) => {
   const conversation = new ConversationSchema({
@@ -37,8 +35,6 @@ const handleStartConversation = (request, response) => {
 
   const sendResponse = (conversationList) => {
     const conversation = conversationList[0];
-
-    initChat(server, conversation);
 
     response.json({
       status: 'success',

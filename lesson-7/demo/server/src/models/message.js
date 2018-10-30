@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const setTimestamp = require('./middleware/timestamp');
+
 const { Schema } = mongoose;
 
 const MessageSchema = new Schema({
-  conversationId: {
+  conversation: {
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'Conversation',
@@ -16,6 +18,8 @@ const MessageSchema = new Schema({
     ref: 'User'
   }
 });
+
+MessageSchema.plugin(setTimestamp);
 
 const Message = mongoose.model('Message', MessageSchema, 'messages');
 

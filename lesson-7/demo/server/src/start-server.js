@@ -3,19 +3,30 @@ const app = require('./modules/app');
 const server = require('./modules/server');
 const morgan = require('morgan');
 const router = require('./router');
+const cors = require("cors");
 
-const errorHandler = (err, request, response)  => {
-  console.error(err.stack);
+const errorHandler = (err, req, res, next) => {
+  if (req.xhr) {
+    res.status(500).send({ status: 'error', error: 'Something broke!' });
+  } else {
+    next(err);
+  }
+};
 
-  response.status(500);
-  response.send('Something broke!');
+const corsOptions = {
+  origin: '*',
+  allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS']
 };
 
 const initServer = port => {
-  app
-    .use(bodyParser.urlencoded({extended: false}))
+    app
     .use(bodyParser.json())
+    .use(bodyParser.urlencoded({
+      extended: true
+    }))
     .use(morgan('dev'))
+    .use(cors(corsOptions))
     .use('/', router)
     .use(errorHandler);
 
