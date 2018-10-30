@@ -73,7 +73,7 @@
     ```
     {
         message: String,
-        conversationId: <conversationId>,
+        conversation: <conversationId>,
         author: <userId> 
     }
     ```
