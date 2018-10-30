@@ -13,6 +13,7 @@ const errorHandler = (err, req, res, next) => {
   }
 };
 
+// Обрабатываем CORS когда запускаем сервер и клиент на разных портах
 const corsOptions = {
   origin: '*',
   allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],

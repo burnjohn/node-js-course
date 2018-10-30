@@ -29,7 +29,7 @@ const checkUserConversations = (ownerId, newUserId) => {
 };
 
 const handleStartConversation = (request, response) => {
-  const convesationOwnerId = request.body.ownerId;
+  const conversationOwnerId = request.body.ownerId;
   const newUserId = request.body.newUserId;
   const name = request.body.name;
 
@@ -49,10 +49,10 @@ const handleStartConversation = (request, response) => {
     });
   };
 
-  checkUserConversations(convesationOwnerId, newUserId)
+  checkUserConversations(conversationOwnerId, newUserId)
     .then( conversation => {
       if (!conversation.length) {
-        return createConversationInDB(convesationOwnerId, newUserId, name)
+        return createConversationInDB(conversationOwnerId, newUserId, name)
       }
       return conversation;
     })

@@ -2,6 +2,11 @@ import io from 'socket.io-client';
 import { renderMessage } from './render-service'
 import { startMessagesService } from './messages-service'
 
+const activateLeaveChatBtn = (onChatLeave) => {
+  const leaveChatBtn = document.querySelector('.message__leave-btn');
+  leaveChatBtn.addEventListener('click', onChatLeave);
+};
+
 const initChat = (userId, conversationId) => {
   const socket = io.connect('http://localhost:8080', );
 
@@ -20,9 +25,7 @@ const initChat = (userId, conversationId) => {
 
   function joinToChat(cb) {
     socket.emit('join', userId, conversationId, cb);
-
-    const leaveChatBtn = document.querySelector('.message__leave-btn');
-    leaveChatBtn.addEventListener('click', leaveChat);
+    activateLeaveChatBtn(leaveChat)
   }
 
   function leaveChat(cb) {

@@ -1,7 +1,7 @@
 const messageBox = document.querySelector('.message__box');
 const messageContainer = document.querySelector('.message__box-container');
 
-const getMessageHTML = ({ author, message, createdAt }, userId) => {
+const getMessageHTML = ({author, message, createdAt}, userId) => {
   const myMessage = author === userId;
   const dateObj = new Date(createdAt);
   const dateString = `${ dateObj.getHours() }:${ dateObj.getMinutes() }:${ dateObj.getSeconds() }`;

@@ -7,7 +7,6 @@ const getAllUser = require('./controllers/user/get-all-users');
 const getSaveImageHandlers = require('./controllers/image/save-image-multipart');
 const createUser = require('./controllers/user/create-user');
 const updateUser = require('./controllers/user/update-user');
-const createConversation = require('./controllers/conversation/create-conversation');
 const getAllConversations = require('./controllers/conversation/get-all-conversations');
 const startConversation = require('./controllers/conversation/start-conversation');
 
@@ -25,7 +24,6 @@ apiRoutes
   .post('/users', createUser)
 
   .get('/conversations/:userId', getAllConversations)
-  .post('/conversations', createConversation)
   .post('/start-chat', startConversation);
 
 

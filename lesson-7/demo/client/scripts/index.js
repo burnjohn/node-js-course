@@ -1,5 +1,6 @@
 import { startSelectUser } from './select-user-controller';
 
+// Захардкоженые параметры юзеров для диалога
 const requestParams = {
   method: 'POST',
   body: {
@@ -16,7 +17,7 @@ const initChatButton = document.querySelector('.init-chat');
 
 initChatButton.addEventListener('click', () => {
   connectToConversation()
-    .then(function(response) {
+    .then(response => {
       return response.json();
     })
     .then(startSelectUser);

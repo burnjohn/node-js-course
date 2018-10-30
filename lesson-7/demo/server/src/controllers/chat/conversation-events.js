@@ -1,43 +1,46 @@
 const User = require('../../models/user');
-const Messages = require('../../models/message');
 const { sendError } = require('./response-helper');
-const conversationManager = require('./conversation-manager');
+const {
+  getChatHistory,
+  addClient,
+  addMessage,
+  addUser,
+  broadcastMessageToAll
+} = require('./conversation-manager');
+
+const findUser = userId => User.findById(userId);
 
 const getConversationHandlers = (client) => {
 
-  const onJoin = (userId, conversationId) => {
-    conversationManager.addClient(client, conversationId);
+  // Если с клиент присоединился
+  const onJoin = (userId, conversationId, respondToClient) => {
+    addClient(client, conversationId);
 
-    Messages.find({ conversation: conversationId }, null, {
-      skip:0, // Starting Row
-      limit:20, // Ending Row
-      sort:{
-        createdAt: 1 //Sort by Date Added ASC
-      }
+    // Получаем все сообщения чата
+    getChatHistory(conversationId).then(messageList => {
+
+      // Отправляем текущему клиенту все сообщения чата
+      respondToClient(messageList);
+
+      findUser(userId).then(user => {
+        const message = {
+          conversation: conversationId,
+          message: `joined ${user.firstName} ${user.lastName}`,
+          author: user.id,
+          createdAt: Date.now()
+        };
+
+        // Сообщение всем клиентам что юзер присоединился к чату
+        addUser(user, conversationId);
+        broadcastMessageToAll(message, conversationId);
+        addMessage(message, conversationId);
+      });
     })
-      .then(messageList => {
-        messageList.forEach( message => {
-          conversationManager.broadcastMessage(message, conversationId);
-        });
-
-        User.findById(userId).then(user => {
-          const message = {
-            conversation: conversationId,
-            message: `joined ${user.firstName} ${user.lastName}`,
-            author: user.id,
-            createdAt: Date.now()
-          };
-
-          conversationManager.addUser(user, conversationId);
-          conversationManager.broadcastMessage(message, conversationId);
-          conversationManager.addMessage(message, conversationId);
-        });
-      })
   };
 
   const onLeave = (conversationId, userId) => {
 
-    User.findById(userId).then(user => {
+    findUser(userId).then(user => {
       if (!user) {
         console.log('No such user!');
         return;
@@ -50,15 +53,15 @@ const getConversationHandlers = (client) => {
         createdAt: Date.now()
       };
 
-      conversationManager.broadcastMessage(message, conversationId);
-      conversationManager.addMessage(message, conversationId);
-
-      conversationManager.removeUser(user, conversationId);
+      // Сообщение всем клиентам что юзер уходит с чата
+      broadcastMessageToAll(message, conversationId);
+      addMessage(message, conversationId);
+      removeUser(user, conversationId);
     });
   };
 
-  const onMessage = ({message, userId} = {}, conversationId, respondFunc) => {
-
+  // Если с клиента пришло сообщение
+  const onMessage = ({ message, userId }, conversationId, respondFunc) => {
     if (!message || !userId) {
       sendError(respondFunc, 'No required field');
     }
@@ -70,16 +73,18 @@ const getConversationHandlers = (client) => {
       createdAt: Date.now()
     };
 
-    conversationManager.broadcastMessage(fullMessage, conversationId);
-    conversationManager.addMessage(fullMessage, conversationId);
+    // Сообщение всем клиентам от текущего юзера
+    broadcastMessageToAll(fullMessage, conversationId);
+    addMessage(fullMessage, conversationId);
   };
 
+  // Если с клиент отсоединился
   const onDisconnect = (error) => {
     console.log('client disconnect...', client.id, 'Error: ', error);
-    const clientConversationIds = conversationManager.getClientConversationIds(client);
+    const clientConversationIds = getClientConversationIds(client);
 
     clientConversationIds.forEach( conversationId => {
-      conversationManager.removeClient(client, conversationId);
+      removeClient(client, conversationId);
     });
   };
 

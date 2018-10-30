@@ -4,10 +4,11 @@ const getConversationEvents = require('./conversation-events');
 const initChat = () => {
   console.log('Chat listener inited');
 
-  // Создаем обработчики событий для чата
+  // Создаем слушатель на сокет подключение к серверу
   socketIo.on('connection', (client) => {
     console.log('Connection: ', client.id);
 
+    // Создаем обработчики для клиента
     const {
       onJoin,
       onLeave,

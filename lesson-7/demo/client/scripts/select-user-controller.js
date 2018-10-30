@@ -1,4 +1,4 @@
-import initChat from './socket';
+import initChat from './init-chat';
 
 export const startSelectUser = ({ conversation }) => {
   const usersContainer = document.querySelector('.select-user');

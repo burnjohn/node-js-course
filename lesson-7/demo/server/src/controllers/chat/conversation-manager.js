@@ -1,8 +1,9 @@
-const MessageSchema = require('../../models/message');
+const Message = require('../../models/message');
 const { sendError, sendSuccess } = require('./response-helper');
 
 const conversations = {};
 
+// Создать диалог где будут хранится все данные
 const createConversation = (conversationId) => {
   conversations[conversationId] = {
     clients: {},
@@ -13,7 +14,7 @@ const createConversation = (conversationId) => {
 };
 
 // Отправить сообщение всем юзерам в комнате
-const broadcastMessage = (message, conversationId) => {
+const broadcastMessageToAll = (message, conversationId) => {
   console.log('Message got: ', message);
 
   const currentConversation = conversations[conversationId];
@@ -28,7 +29,7 @@ const broadcastMessage = (message, conversationId) => {
   });
 };
 
-// Добавить запись в историю сообщений комнаты
+// Добавить запись в историю сообщений диалога
 const addMessage = (data, conversationId, respondFunc) => {
   const currentConversation = conversations[conversationId];
 
@@ -41,18 +42,20 @@ const addMessage = (data, conversationId, respondFunc) => {
 
   console.log('message: ', data);
 
-  const message = new MessageSchema(data);
-  message.save().then(data => sendSuccess(respondFunc, data)).catch((error) => {
-    sendError(respondFunc, error);
-  });
+  const message = new Message(data);
+  message.save()
+    .then(data => sendSuccess(respondFunc, data))
+    .catch(error => sendError(respondFunc, error));
 };
 
 // Получить историю сообщений комнаты
-const getChatHistory = (conversationId) => {
-  const currentConversation = conversations[conversationId];
-
-  return currentConversation.messages;
-};
+const getChatHistory = conversationId => (
+  Message.find(
+    { conversation: conversationId },
+    null,
+    { sort:{ createdAt: 1 } }//Сортировка по последнему созданому сообщению
+  )
+);
 
 const addUser = (user, conversationId) => {
   const currentConversation = conversations[conversationId];
@@ -119,6 +122,6 @@ module.exports = {
   addUser,
   addMessage,
   getChatHistory,
-  broadcastMessage,
+  broadcastMessageToAll,
   getClientConversationIds
 };

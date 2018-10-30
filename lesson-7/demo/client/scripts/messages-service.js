@@ -1,3 +1,14 @@
+import { renderMessage } from './render-service';
+
+const renderMessages = (messageList) => {
+  if (!messageList.length) {
+    console.log('no messages in chat');
+    return;
+  }
+
+  messageList.forEach(renderMessage);
+};
+
 export const startMessagesService = (onMessage, onJoin) => {
   const joinChatBtn = document.querySelector('.message__join-btn');
   const messagesInputContainer = document.querySelector('.message__input-container');
@@ -28,6 +39,6 @@ export const startMessagesService = (onMessage, onJoin) => {
     const messagesContainer = document.querySelector('.container');
     messagesContainer.classList.remove('hidden');
 
-    onJoin();
+    onJoin(renderMessages);
   });
 };
