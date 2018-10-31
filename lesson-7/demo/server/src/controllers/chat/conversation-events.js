@@ -5,7 +5,8 @@ const {
   addClient,
   addMessage,
   addUser,
-  broadcastMessageToAll
+  broadcastMessageToAll,
+  getClientConversationIds
 } = require('./conversation-manager');
 
 const findUser = userId => User.findById(userId);
