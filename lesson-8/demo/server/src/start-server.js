@@ -15,17 +15,15 @@ const errorHandler = (err, req, res, next) => {
 
 // Обрабатываем CORS когда запускаем сервер и клиент на разных портах
 const corsOptions = {
-  origin: '*',
+  origin: 'http://localhost:3001',
   allowedHeaders: ['Content-Type', 'Authorization', 'Content-Length', 'X-Requested-With', 'Accept'],
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS']
 };
 
 const initServer = port => {
     app
+    .use(bodyParser.urlencoded({extended: false}))
     .use(bodyParser.json())
-    .use(bodyParser.urlencoded({
-      extended: true
-    }))
     .use(morgan('dev'))
     .use(cors(corsOptions))
     .use('/', router)

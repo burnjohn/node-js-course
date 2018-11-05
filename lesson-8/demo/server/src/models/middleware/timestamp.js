@@ -19,10 +19,10 @@ const setTimestamp = (schema) => {
     this.updatedAt = now;
 
     if (!this.createdAt) {
-      this.createdAt = now
+      this.createdAt = now;
     }
 
-    next()
+    next();
   });
 };
 

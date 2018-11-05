@@ -3,13 +3,13 @@ const setTimestamp = require('./middleware/timestamp');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  firstName: String,
-  lastName: String,
-  telephone: String,
-  nickName: String,
-  location: String,
-  password: String,
-  email: String,
+  firstName: Schema.Types.String,
+  lastName: Schema.Types.String,
+  telephone: Schema.Types.String,
+  nickName: Schema.Types.String,
+  location: Schema.Types.String,
+  password: Schema.Types.String,
+  email: Schema.Types.String,
   conversations: [{ type: Schema.Types.ObjectId, ref: 'Conversation'}]
 });
 

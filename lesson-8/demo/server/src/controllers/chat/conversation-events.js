@@ -15,6 +15,7 @@ const getConversationHandlers = (client) => {
 
   // Если с клиент присоединился
   const onJoin = (userId, conversationId, respondToClient) => {
+
     addClient(client, conversationId);
 
     // Получаем все сообщения чата

@@ -5,7 +5,8 @@ const initChat = () => {
   console.log('Chat listener inited');
 
   // Создаем слушатель на сокет подключение к серверу
-  socketIo.on('connection', (client) => {
+  socketIo.on('connection', client => {
+
     console.log('Connection: ', client.id);
 
     // Создаем обработчики для клиента
@@ -18,8 +19,8 @@ const initChat = () => {
 
     // подписываемся на все события чата
     client
-      .on('join', onJoin)
-      .on('leave', onLeave)
+      .on('join',  onJoin)
+      .on('leave',  onLeave)
       .on('message', onMessage)
       .on('disconnect', onDisconnect)
       .on('error', (err) => {
