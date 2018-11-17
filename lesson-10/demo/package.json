@@ -1,0 +1,22 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "debug": "nodemon --inspect index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^2.3.1",
+    "bcrypt": "3.0.2",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.14",
+    "morgan": "^1.9.1",
+    "multer": "^1.4.0",
+    "nodemon": "^1.18.4"
+  }
+}
