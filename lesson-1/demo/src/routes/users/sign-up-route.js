@@ -6,7 +6,7 @@ const saveUser = user => {
   // сохранить туда файл
 };
 
-const userCreateRoute = (request, response) => {
+const signUpRoute = (request, response) => {
   // Взять данные что пришли
 
   if (request.method === 'POST') {
@@ -20,7 +20,7 @@ const userCreateRoute = (request, response) => {
 
     request.on('end', function () {
       const post = qs.parse(body);
-      // use post['blah'], etc.
+      console.log(post);
     });
   }
 
@@ -34,4 +34,4 @@ const userCreateRoute = (request, response) => {
   // использовать response
 };
 
-module.exports = userCreateRoute;
+module.exports = signUpRoute;
