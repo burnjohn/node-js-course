@@ -43,7 +43,7 @@ var myLogger = function (req, res, next) {
 
 
 Вот так выглядит использование middleware в коде
-```
+```js
 var express = require('express');
 var app = express();
 
