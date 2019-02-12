@@ -13,7 +13,7 @@ const signUpRoute = (request, response) => {
     let body = '';
 
     request.on('data', function (data) {
-      body += data;
+      body = body + data;
 
       console.log('Incoming data!!!!');
     });

@@ -22,12 +22,7 @@ const createUser = (request, response) => {
   const sendResponse = () => {
     response.json({
       status: 'success',
-      user: {
-        "userName": "Ivan",
-        "password": "some pass",
-        "tel": 380635291111,
-        "id": 1538002306645
-      }
+      user: userData
   });
   };
 

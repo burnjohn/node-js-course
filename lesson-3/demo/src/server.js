@@ -3,14 +3,14 @@ const app = require('./modules/app');
 const morgan = require('morgan');
 const router = require('./routes/router');
 
-const errorHandler = (err, req, res)  => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+const errorHandler = (req, res, next)  => {
+  res.status(500).send('No such page');
+  next();
 };
 
 const startServer = port => {
   app
-    .use(bodyParser.urlencoded({extended: false}))
+    .use(bodyParser.urlencoded({ extended: false }))
     .use(bodyParser.json())
     .use(morgan('dev'))
     .use('/', router)
