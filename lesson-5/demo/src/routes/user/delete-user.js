@@ -1,4 +1,4 @@
-const User = require('../../db/schemas/user');
+const User = require('../../modules/db/schemas/user');
 
 const getUser = (request, response) => {
   const id = request.params.id;

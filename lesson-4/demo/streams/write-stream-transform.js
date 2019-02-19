@@ -13,7 +13,7 @@ myWriteStream.on('finish', () => {
 });
 
 const upperCaseTransform = new Transform({
-  transform: (chunk, encoding, done) => {
+  transform: (chunk, encoding, next) => {
     const newData = chunk
       .toString()
       .split(' ')
@@ -22,7 +22,7 @@ const upperCaseTransform = new Transform({
       .join(' ');
 
 
-    done(null, '1111');
+    next(null, newData);
   }
 });
 

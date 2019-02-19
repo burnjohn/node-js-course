@@ -12,4 +12,12 @@ ConversationSchema.plugin(setTimestamp);
 
 const Conversation = mongoose.model('Conversation', ConversationSchema, 'conversations');
 
-module.exports = Conversation;
+module.exports = {
+  get: Conversation.find,
+  create: (name, participants) => (
+    new ConversationSchema({
+      name,
+      participants
+    })
+  )
+};

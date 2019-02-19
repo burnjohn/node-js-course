@@ -15,14 +15,15 @@ const middlewareExample = (req, resp, next) => {
 
   resp.status(400);
   resp.json({
-    error: 'user has no "name" field'
+    error: 'user has no "userName" field'
   })
 };
 
 apiRoutes
   .get('/', mainRoute)
   .get('/image', getImageRoute)
-  .get('/users/:id', getUser)
+  .get('/users/:userId', getUser)
+
   .post('/users', middlewareExample, createUser)
   .post('/image', getSaveImageHandlers());
 

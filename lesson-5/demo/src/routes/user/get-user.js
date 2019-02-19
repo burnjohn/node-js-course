@@ -1,16 +1,17 @@
-const User = require('../../db/schemas/user');
+const User = require('../../modules/db/schemas/user');
 
 const getUser = (request, response) => {
+
   const id = request.params.id;
-  const sendResponse = ([user, product]) => {
+
+  const sendResponse = (user) => {
     response.status(200);
     response.json(user);
   };
 
   const findUser = User.findById(id);
-  const findProduct = Product.findById(id);
 
-  Promise.all([findUser, findProduct])
+  findUser
     .then(sendResponse)
     .catch(err => {
       console.error(err)

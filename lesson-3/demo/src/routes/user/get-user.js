@@ -7,7 +7,7 @@ const getUserFromDb = (id) => {
 };
 
 const getUser = (request, response) => {
-  const id = request.params.id;
+  const id = request.params.userId;
 
   response.set("Content-Type", "application/json");
 

@@ -4,6 +4,14 @@ const util = require('util');
 
 const usersFolder = path.resolve(__dirname, '../../../', 'data/users');
 
+// PROMISIFY function example
+//
+// const writeFile = (src, content) => {
+//   return new Promise((resolve, reject) => {
+//     fs.writeFile(src, content, resolve);
+//   });
+// };
+
 const writeFile = util.promisify(fs.writeFile);
 
 const saveNewUser = (fileName, data) => {
@@ -15,7 +23,7 @@ const saveNewUser = (fileName, data) => {
 
 const createUser = (request, response) => {
   const user = request.body;
-  const userData = Object.assign({}, user, { id: Date.now() });
+  const userData =  { ...user, id: Math.random() };
 
   const fileName = userData.userName.toLowerCase() + userData.id;
 
@@ -24,7 +32,7 @@ const createUser = (request, response) => {
       status: 'success',
       user: userData
   });
-  };
+};
 
   const sendError = () => {
     response.status(400);

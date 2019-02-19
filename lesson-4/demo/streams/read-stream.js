@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 const myReadStream = fs.createReadStream(__dirname + '/readme.txt', {encoding: 'utf8'});
+
 let chunkIndex = 0;
 
 myReadStream.on('open', () => {

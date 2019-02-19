@@ -1,7 +1,15 @@
-const getClearUrl = url => {
+const hasNumber = myString => /\d/.test(myString);
+
+const getIdFreeUrl = url => {
   // url example : `/user/12345`
   const lastIndex = url.lastIndexOf('/');
   const idString = url.slice(lastIndex +1).trim();
+
+  // url example : `/users`
+  if (!hasNumber(idString)) {
+    return url;
+  }
+
   const idNumber = +idString;
 
   if (idNumber && lastIndex !== -1) {
@@ -12,7 +20,7 @@ const getClearUrl = url => {
 };
 
 const getRouteHandler = (routerConfig, url) => {
-  const clearUrl = getClearUrl(url);
+  const clearUrl = getIdFreeUrl(url);
 
   return routerConfig[clearUrl];
 };

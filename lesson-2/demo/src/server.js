@@ -1,4 +1,4 @@
-// const https = require('https');
+const http = require('http');
 const url = require('url');
 const fs = require('fs');
 const morgan = require('morgan');
@@ -7,14 +7,9 @@ const getRouteHandler = require('./helpers/get-route-handler');
 
 const logger = morgan('combined');
 
-// const options = {
-//   cert: ,
-//   key:
-// };
-
 const startServer = port => {
 
-  const server = https.createServer(options, (request, response) => {
+  const server = http.createServer((request, response) => {
     // Get route from the request
     const parsedUrl = url.parse(request.url);
 
