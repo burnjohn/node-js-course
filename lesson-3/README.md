@@ -43,7 +43,7 @@ var myLogger = function (req, res, next) {
 
 
 Вот так выглядит использование middleware в коде
-```
+```js
 var express = require('express');
 var app = express();
 
@@ -189,22 +189,17 @@ http.createServer(function(req, res){
 ### Задание:
 
 1. Перенести все запросы что сделали до этого на Express
-    - POST `/products` - создание товара 
-        - получаем json с товаром
-        - добавляем к нему уникальный `id`
-        - сохраняем товар в `<all-products.json>`
-        - отправляем json с товаром и полем `success`
-       ```
-       {
-        "status": "success", 
-        "product": <product>
-       }
-       ```
    - GET `/products/:id` - получение товара 
        - получаем `id` параметр с запроса
        - находим товар в `<all-products.json>`
        - отправляем json с товаром 
-       - если товара нет отправляем json с {'status': 'not found'}
+       - если товара нет отправляем json с {'status': 'no products', 'products': []}
+       
+   - GET `/products/?ids='<id>, <id>,<id>'` - получение нескольких товаров 
+       - получаем `id`шки с запроса
+       - находим товары в `<all-products.json>`
+       - отправляем json с товарами 
+       - если товара нет отправляем json с {'status': 'no products', 'products': []}
        
    - POST `/users` - создание юзера 
        - получаем json с юзером
@@ -226,23 +221,37 @@ http.createServer(function(req, res){
              
    #### Новый функцинал
        
-   - PUT `/products/:id` - изменение товара 
-       - получаем `id` параметр с запроса
-       - получаем новые поля для изменения с тела запроса
-       - находим товар в `<all-products.json>`
-       - меняем измененные поля
-       - отправляем json с измененным товаром 
+   - POST `/orders/` - создание заказа 
+       - в `body` шлем параметры заказа
+     ```
+      {
+       "user": <userId>, 
+       "products": [<productId1>, <productId2>, <productId2>]
+       "deliveryType": "delivery"
+       "deliveryAdress": "<deliveryAdressText>"
+      }
+      ```
+       - находим товары в `<all-products.json>`
+       - создаем в папке с юзером папку `orders`
+       - создаем в `orders` новый json с тем что пришло нам из запроса
+       - отправляем json с готовым заказом
      ```
       {
        "status": "success", 
-       "product": <product>
+       "order": {
+         "id": <orderId>,
+         "user": <userId>, 
+         "products": [<productId1>, <productId2>, <productId2>]
+         "deliveryType": "delivery"
+         "deliveryAdress": "<deliveryAdressText>"
+        }
       }
       ```
-       - если товара нет отправляем json с {'status': 'not found'}
-       
-   - PUT `/users/:id` - изменение юзера, то же самое что и в примере выше
-   
-   - Реализовать `multipart-data` запрос (зачем он поговорим на следующем уроке)
+       - если товара нет отправляем json с {'status': 'failed', 'order': null}
+
+  #### Доп задание
+          
+   - Реализовать `multipart-data` запрос c отправлением картинки и данных юзера
         - POST `/images` - создание картинки
         - в теле запроса должна быть картинка и `id` товара которому нужно добавить эту картинку
         - похожая реализация есть в `demo/routes/image/save-image-multipart`  
@@ -254,15 +263,7 @@ http.createServer(function(req, res){
         <img src="./img/4.png" />
         
         - в ответе должен приходить адрес новой картинки
-        
-   #### Доп задание
-   
-   Написать по аналогии с `products` такие запросы:
-   
-    - GET `/categories/:id` 
-    - POST `/categories` 
-    - PUT `/categories/:id`
-   
+
    
 
 
