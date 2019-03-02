@@ -99,10 +99,41 @@
      {
       "product": "<productId>",
       "author": "<authorId>",
-      "text": "Some vegitable", 
-      "title": "Some vegitable",
-      "mark": "Some vegitable", 
+      "text": "This pizza was the best", 
+      "mark": 5, 
      }
     ```
+    Поле `mark` - это оценка товару, которую будет ставить пользователь. От 1 до 5.
+    
+    **Получение коментария** 
+    - сделать роут `GET comments/?productId="v123dsagasdg"`
+    - в ответе нужно прислать массив с комментариями к указанному товару
+    ```
+     {
+      "status": "success", 
+      "сomments": [{ comment1 }, { comment2 }, { comment3 }]
+     }
+    ```
+    - если комментарием нет - то отправлять
+    ```
+     {
+      "status": "success", 
+      "сomments": []
+     }
+    ```
+    
+    **Создание коментария**
+    - сделать роут `POST comments`
+    - в запросе слать 
+        ```
+         {
+          "product": "<productId>",
+          "author": "<authorId>",
+          "text": "This pizza was the best", 
+          "mark": 4, 
+         }
+        ```
+    - сохранить данные в DB
+    
 
 To be continued...

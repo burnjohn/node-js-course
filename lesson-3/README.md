@@ -208,8 +208,8 @@ http.createServer(function(req, res){
        - отправляем json с юзером и полем `success`
       ```
       {
-       "status": "success", 
-       "user": <user>
+        "status": "success", 
+        "user": <user>
       }
       ```
     - GET `/users/:id` - получение юзера 
