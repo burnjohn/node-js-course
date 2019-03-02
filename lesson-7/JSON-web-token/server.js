@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config');
 const findUser = require('./app/routes/find-user');
+const createUser = require('./app/routes/create-user');
 const auth = require('./app/routes/auth');
 const app = require('./app/modules/app');
 const verifyToken = require('./app/modules/check-token');
@@ -26,7 +27,9 @@ apiRoutes
   .get('/', (req, res) => {
     res.send({ message: 'Welcome to the API!' });
   })
-  .get('/users', findUser);
+  .get('/users', findUser)
+  .post('/users', createUser);
+
 
 app.use('/api', apiRoutes);
 

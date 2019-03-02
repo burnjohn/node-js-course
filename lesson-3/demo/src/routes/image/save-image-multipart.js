@@ -44,7 +44,8 @@ const saveImageMultipart = (req, res) => {
   const fileObject = req.file;
 
   // Берем другие данные что пришли
-  const userId = req.body.userId;
+  // const userId = req.body.userId;
+  const userId = '1234';
 
   moveImage(fileObject, userId)
     .then(userImageFolderName => {

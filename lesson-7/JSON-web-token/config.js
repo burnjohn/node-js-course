@@ -1,4 +1,9 @@
-module.exports = {
+const dbUser = "admin";
+const dbPassword = "qwerty12345";
+
+const config = {
   secret: 'secret-key',
-  database: 'mongodb+srv://moderator:uprzmKvl87xwRJ5m@cluster0-drpck.mongodb.net/test?retryWrites=true'
+  database: `mongodb://${ dbUser }:${ dbPassword }@ds159020.mlab.com:59020/marketplace-test`
 };
+
+module.exports = config;

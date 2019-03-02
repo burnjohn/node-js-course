@@ -4,32 +4,36 @@ const bcrypt = require('bcrypt');
 
 const errorResp = {
   success: false,
-  message: 'Authentication failed. User not found.',
+  message: 'Authentication failed.',
 };
 
 const passwMatches = (passw1, hash) => bcrypt.compareSync(passw1, hash);
 
-const generateToken = payload => {
+const generateToken = paramsForTokenGeneration => {
   const secretKey = app.get('superSecret');
 
-  return jwt.sign(payload, secretKey, {
+  return jwt.sign(paramsForTokenGeneration, secretKey, {
     expiresIn: 60 * 60 * 24
   })
 };
 
 const authenticate = (req, res) => {
-  User.findOne({ name: req.body.name }, onFind);
+  const { id: userId, password } = req.body;
+
+  User.findById(userId, onFind);
 
   function onFind(err, user) {
     if (err) throw err;
 
-    if (!user || !passwMatches(req.body.password, user.password)) {
+    const correctPassword = passwMatches(password, user.password);
+
+    if (!user || !correctPassword) {
       res.json(errorResp);
       return;
     }
 
     const payload = {
-      admin: user.admin,
+      password, userId
     };
 
     const token = generateToken(payload);

@@ -1,16 +1,22 @@
-const CreateUser = require('../models/user');
+const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 const createUser = (req, res) => {
-  const hashedPassword =  bcrypt.hashSync('password', 10);
+  const { firstName, lastName, telephone, nickName, location, email, password } = req.body;
 
-  const nick = new CreateUser({
-    name: 'Nick Cerminara',
-    password: hashedPassword,
-    admin: true
+  const hashedPassword = bcrypt.hashSync(password, 10);
+
+  const nick = new User({
+    firstName,
+    lastName,
+    telephone,
+    nickName,
+    location,
+    email,
+    password: hashedPassword
   });
 
-  nick.save(function(err) {
+  nick.save((err) => {
     if (err) throw err;
 
     console.log('User saved successfully');
