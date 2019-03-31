@@ -5,9 +5,9 @@ const app = require('./modules/app');
 const morgan = require('morgan');
 const router = require('./routes/router');
 
-const errorHandler = (req, res, next)  => {
-  res.status(500).send('No such page');
-  next();
+const errorHandler = (err, req, res, next)  => {
+  console.error(err.stack);
+  res.status(404).send('No such page');
 };
 
 const checkAuth = (req, res, next)  => {

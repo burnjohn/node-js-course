@@ -6,7 +6,7 @@ const controller = require('./controller');
 const errorHandler = (err, req, res, next)  => {
   console.error(err.stack);
 
-  res.json(500).send('Something broke!');
+  res.json(404).send('No such page');
 };
 
 const startServer = port => {

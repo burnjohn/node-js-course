@@ -3,10 +3,10 @@ const app = require('./modules/app');
 const morgan = require('morgan');
 const router = require('./routes/router');
 
-const errorHandler = (err, req, res)  => {
+const errorHandler = (err, req, res, next)  => {
   console.error(err.stack);
 
-  res.json(500).send('Something broke!');
+  res.json(404).send('Something broke!');
 };
 
 const startServer = port => {

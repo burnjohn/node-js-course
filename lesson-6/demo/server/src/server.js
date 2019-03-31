@@ -5,10 +5,10 @@ const morgan = require('morgan');
 const router = require('./routes/router');
 const initChat = require('./modules/chat/init-chat');
 
-const errorHandler = (err, req, res)  => {
+const errorHandler = (err, req, res, next)  => {
   console.error(err.stack);
 
-  res.json(500).send('Something broke!');
+  res.json(404).send('No such page');
 };
 
 const startServer = port => {
