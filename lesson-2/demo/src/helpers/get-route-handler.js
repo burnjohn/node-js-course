@@ -1,7 +1,7 @@
 const hasNumber = myString => /\d/.test(myString);
 
 const getIdFreeUrl = url => {
-  // url example : `/user/12345`
+  // url example : `/users/12345`
   const lastIndex = url.lastIndexOf('/');
   const idString = url.slice(lastIndex +1).trim();
 

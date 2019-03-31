@@ -1,6 +1,12 @@
 const app = require('./app');
 const jwt = require('jsonwebtoken');
 
+// POST { token: <token>}
+
+// GET ?token=<token>
+
+// header { x-access-token: <token> }
+
 const getToken = req => req.body.token || req.query.token || req.headers['x-access-token'];
 
 const checkToken = (req, res, next) => {

@@ -33,7 +33,8 @@ const authenticate = (req, res) => {
     }
 
     const payload = {
-      password, userId
+      password,
+      userId
     };
 
     const token = generateToken(payload);
