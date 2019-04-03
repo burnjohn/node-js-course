@@ -1,6 +1,5 @@
 const express = require('express');
 const mainRoute = require('./main/main');
-const getImageRoute = require('./image/get-image');
 const getUser = require('./user/get-user');
 const getSaveImageHandlers = require('./image/save-image-multipart');
 const createUser = require('./user/create-user');
@@ -21,7 +20,6 @@ const middlewareExample = (req, resp, next) => {
 
 apiRoutes
   .get('/', mainRoute)
-  .get('/image', getImageRoute)
   .get('/users/:userId', getUser)
 
   .post('/users', middlewareExample, createUser)

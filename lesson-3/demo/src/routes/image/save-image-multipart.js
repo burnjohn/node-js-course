@@ -1,17 +1,17 @@
-const multer  = require('multer');
+const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
 
 const renameFile = util.promisify(fs.rename);
 
-const TEMP_IMAGE_FOLDER = path.join(__dirname, '../../../', 'assets');
+const TEMPORARY_IMAGE_FOLDER = path.join(__dirname, '../../../', 'assets');
 const USER_IMAGE_FOLDER = path.join(__dirname, '../../../', 'data', 'user-images');
 
 const storage = multer.diskStorage({
-  // определяем папку куда сохранять временное изображение
+  // определяем временную папку куда сохранить изображение
   destination: (req, file, next) => {
-    next(null, TEMP_IMAGE_FOLDER)
+    next(null, TEMPORARY_IMAGE_FOLDER)
   },
   // определяем имя файла
   filename: (req, file, next) => {
@@ -20,22 +20,28 @@ const storage = multer.diskStorage({
 });
 
 // Применяем настройки
-const upload = multer({ storage });
+const upload = multer(storage);
+
+const createUserFolder = (filePath) => {
+  if (!fs.existsSync(filePath)){
+    fs.mkdirSync(filePath);
+  }
+};
 
 const moveImage = (fileObject, userId) => {
   //  cоздаем папку для файлов пользователя
   const userImageFolderName = 'user-' + userId;
   const userImagePath =  path.join(USER_IMAGE_FOLDER, userImageFolderName);
 
-  if (!fs.existsSync(userImagePath)){
-    fs.mkdirSync(userImagePath);
-  }
+  createUserFolder(userImagePath);
 
-  const tempFilePath = path.join(TEMP_IMAGE_FOLDER, fileObject.originalname);
-  const newFilePath = path.join(userImagePath, fileObject.originalname);
+  const pathToTemporaryImage = path.join(TEMPORARY_IMAGE_FOLDER, fileObject.originalname);
+  const pathToRegularImage = path.join(userImagePath, fileObject.originalname);
 
-  return renameFile(tempFilePath, newFilePath)
-    .then(() => userImageFolderName)
+  return renameFile(pathToTemporaryImage, pathToRegularImage)
+    .then(() => {
+      return userImageFolderName;
+    })
     .catch((error) => console.log(error))
 };
 
@@ -50,9 +56,8 @@ const saveImageMultipart = (req, res) => {
   moveImage(fileObject, userId)
     .then(userImageFolderName => {
       res.json({ status: 'was saved in folder: ' +  userImageFolderName });
-    })
-
+    });
 };
 
 // добавляем промежуточный обработчик для post-multipart запросов
-module.exports = () => [upload.single('file'), saveImageMultipart];
+module.exports = () => [upload.single('image'), saveImageMultipart];
