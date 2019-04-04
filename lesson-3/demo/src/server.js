@@ -6,8 +6,9 @@ const morgan = require('morgan');
 const router = require('./routes/router');
 
 const errorHandler = (err, req, res, next)  => {
-  console.error(err.stack);
-  res.status(404).send('No such page');
+  res
+    .status(500)
+    .send('Error found: ' + err.stack);
 };
 
 const staticPath = path.join(__dirname, '..', 'assets');

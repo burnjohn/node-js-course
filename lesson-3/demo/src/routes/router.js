@@ -23,7 +23,10 @@ apiRoutes
   .get('/users/:userId', getUser)
 
   .post('/users', middlewareExample, createUser)
-  .post('/image', getSaveImageHandlers());
+  .post('/image', getSaveImageHandlers())
+  .get('*', (req, res, next) => {
+      res.status(404).send('Route not exists');
+  });
 
 
 module.exports = apiRoutes;

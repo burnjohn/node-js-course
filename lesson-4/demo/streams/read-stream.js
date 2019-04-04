@@ -11,6 +11,8 @@ myReadStream.on('open', () => {
 myReadStream.on('data', chunk => {
   chunkIndex++;
 
+  debugger
+
   if (chunkIndex === 3) {
     myReadStream.pause();
     console.log('WAS PAUSED: ', !myReadStream.isPaused());

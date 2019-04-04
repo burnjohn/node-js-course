@@ -5,22 +5,34 @@ const myReadStream = fs.createReadStream(__dirname + '/readme.txt', {encoding: '
 const myWriteStream = fs.createWriteStream(__dirname + '/readme_created.txt');
 
 myWriteStream.on('open', () => {
-  console.log('File processing was started');
+  console.log('File translation was started');
 });
 
 myWriteStream.on('finish', () => {
-  console.log('File was processed');
+  console.log('File was translated');
 });
+
+const dictionary = {
+  widow: 'окно',
+  brother: 'брат',
+  books: 'книги'
+};
 
 const upperCaseTransform = new Transform({
   transform: (chunk, encoding, next) => {
     const newData = chunk
       .toString()
       .split(' ')
-      .map(str => str.toUpperCase())
-      .reverse()
-      .join(' ');
+      .map(word => {
+        const lowerCaseWord = word.toLowerCase().trim();
 
+        if (dictionary[lowerCaseWord]) {
+          return dictionary[lowerCaseWord];
+        }
+
+        return word;
+      })
+      .join(' ');
 
     next(null, newData);
   }
