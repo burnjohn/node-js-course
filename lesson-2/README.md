@@ -447,14 +447,7 @@ fs.unlink('input.txt', function(err) {
  "products": []
 }
 ```
-  4. Сделать на сервере поддержку `https`
-  
-  #### `https`
-  - Сгенерировать ключ и сертификат [инструкция](https://devcenter.heroku.com/articles/ssl-certificate-self)
-  - Подключить `https` модуль, передать в него ключи
-  - Убедится что когда вы заходите на localhost вашего бекенд приложения браузер говорит что `connection is secure`` 
-  
-  
+
 #### Требования
    - Приложение должно лежать в отдельном вашем репозитории с названием `marketplace-server-goit`
    - Все задание нужно делать в ветке `homework-2`
